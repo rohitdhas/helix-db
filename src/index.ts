@@ -1,8 +1,9 @@
 import fs from 'fs';
+import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { IDatabase, IDocument } from './interfaces/database.interface';
 
-const DB_FILE = 'data.json';
+const DB_FILE = path.join(__dirname, '..', '.helix', 'store.json');
 
 class Database implements IDatabase {
   private documents: Record<string, IDocument>;
@@ -14,7 +15,8 @@ class Database implements IDatabase {
       const data = fs.readFileSync(DB_FILE, 'utf8');
       this.documents = JSON.parse(data);
     } catch (err) {
-      this._save();
+      // Creates .helix/store.json file if it doesn't exist
+      fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
     }
   }
 
