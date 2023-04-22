@@ -1,12 +1,12 @@
 import { HelixDB } from '../src';
-const database = new HelixDB();
 
 describe('Database', () => {
+  let database = new HelixDB();
 
   beforeEach(() => {
     // Clean the database before running each test
     database.erase();
-  })
+  });
 
   describe('getAll', () => {
     it('should return an empty array when there are no documents', () => {
@@ -14,8 +14,14 @@ describe('Database', () => {
     });
 
     it('should return all documents in the database', () => {
-      const doc1 = database.create({ title: 'Document 1', content: 'Lorem ipsum' });
-      const doc2 = database.create({ title: 'Document 2', content: 'Dolor sit amet' });
+      const doc1 = database.create({
+        title: 'Document 1',
+        content: 'Lorem ipsum',
+      });
+      const doc2 = database.create({
+        title: 'Document 2',
+        content: 'Dolor sit amet',
+      });
       const docs = database.getAll();
       expect(docs).toContainEqual(doc1);
       expect(docs).toContainEqual(doc2);
@@ -28,20 +34,32 @@ describe('Database', () => {
     });
 
     it('should return the document with the specified ID', () => {
-      const doc = database.create({ title: 'Document 1', content: 'Lorem ipsum' });
+      const doc = database.create({
+        title: 'Document 1',
+        content: 'Lorem ipsum',
+      });
       expect(database.getById(doc.id)).toEqual(doc);
     });
   });
 
   describe('create', () => {
     it('should create a new document with a unique ID', () => {
-      const doc1 = database.create({ title: 'Document 1', content: 'Lorem ipsum' });
-      const doc2 = database.create({ title: 'Document 2', content: 'Dolor sit amet' });
+      const doc1 = database.create({
+        title: 'Document 1',
+        content: 'Lorem ipsum',
+      });
+      const doc2 = database.create({
+        title: 'Document 2',
+        content: 'Dolor sit amet',
+      });
       expect(doc1.id).not.toBe(doc2.id);
     });
 
     it('should save the document to the database', () => {
-      const doc = database.create({ title: 'Document 1', content: 'Lorem ipsum' });
+      const doc = database.create({
+        title: 'Document 1',
+        content: 'Lorem ipsum',
+      });
       const savedDoc = database.getById(doc.id);
       expect(savedDoc).toEqual(doc);
     });
@@ -49,7 +67,10 @@ describe('Database', () => {
 
   describe('update', () => {
     it('should update the specified document', () => {
-      const doc = database.create({ title: 'Document 1', content: 'Lorem ipsum' });
+      const doc = database.create({
+        title: 'Document 1',
+        content: 'Lorem ipsum',
+      });
       const updatedDoc = database.update(doc.id, { title: 'Updated document' });
       expect(updatedDoc).toHaveProperty('title', 'Updated document');
       const savedDoc = database.getById(doc.id);
@@ -59,7 +80,10 @@ describe('Database', () => {
 
   describe('delete', () => {
     it('should delete the specified document', () => {
-      const doc = database.create({ title: 'Document 1', content: 'Lorem ipsum' });
+      const doc = database.create({
+        title: 'Document 1',
+        content: 'Lorem ipsum',
+      });
       database.delete(doc.id);
       expect(database.getById(doc.id)).toBeUndefined();
     });
@@ -74,17 +98,31 @@ describe('Database', () => {
     });
   });
 
-  // test('throws an error if database file size exceeds the maximum allowed size', () => {
-  //   // Fill up the database with a large amount of data
-  //   for (let i = 0; i < 100000; i++) {
-  //     db.create({ name: `Person ${i}`, age: i });
-  //   }
+  describe('maxSize config option', () => {
 
-  //   // Attempt to create another document, which should trigger an error
-  //   expect(() => {
-  //     db.create({ name: 'John Doe', age: 30 });
-  //   }).toThrowError(
-  //     'Database file size (5.29 MB) exceeded the maximum allowed size (5 MB). Please remove some data from the database.'
-  //   );
-  // });
+    it('should use default max size of 5 MB if not specified', () => {
+      const db = new HelixDB();
+      expect(db['maxSize']).toEqual(5 * 1024 * 1024);
+    });
+
+    it('should use specified max size if provided', () => {
+      const db = new HelixDB({ maxSize: 10 });
+      expect(db['maxSize']).toEqual(10 * 1024 * 1024);
+    });
+
+    it('should throw an error if the total size of stored documents exceeds the maximum database size', () => {
+      const db = new HelixDB({ maxSize: 8 });
+      const largeData = 'x'.repeat(4 * 1024 * 1024); // 4 MB string
+
+      expect(() => {
+        for (let i = 0; i < 3; i++) {
+          db.create({ key: `key_${i}`, largeData }); // Add 3 documents that are each 4 MB in size
+        }
+      }).toThrowError(
+        "Database file size limit (8.00 MB) exceeded. Maximum allowed size is 8388608 bytes. You can configure the database to allow more space by increasing the 'maxSize' option."
+      );
+
+      db.erase();
+    });
+  });
 });
