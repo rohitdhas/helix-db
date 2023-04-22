@@ -1,15 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { IDatabase, IDocument } from './interfaces/database.interface';
+import { IDatabase, IDocument, IDbConfig } from './interfaces/database.interface';
 
 const DB_FILE = path.join(__dirname, '..', '.helix', 'store.json');
+const DEFAULT_MAX_SIZE = 5; // Default size of 5 MB
 
 class Database implements IDatabase {
   private documents: Record<string, IDocument>;
+  private maxSize: number;
 
-  constructor() {
+  constructor(configOptions?: IDbConfig) {
+    const { maxSize = DEFAULT_MAX_SIZE } = configOptions || {};
+
     this.documents = {};
+    this.maxSize = maxSize * 1024 * 1024;
 
     try {
       const data = fs.readFileSync(DB_FILE, 'utf8');
@@ -57,12 +62,12 @@ class Database implements IDatabase {
     const data = JSON.stringify(this.documents);
     const size = Buffer.byteLength(data, 'utf8');
 
-    if (size > 5 * 1024 * 1024) {
+    if (size > this.maxSize) {
       throw new Error(
-        `Database file size (${(size / 1024 / 1024).toFixed(
-          2
-        )} MB) exceeded the maximum allowed size (5 MB). Please remove some data from the database.`
-      );
+        `Database file size limit (${(this.maxSize / 1024 / 1024).toFixed(2)} MB) exceeded. ` +
+        `Maximum allowed size is ${this.maxSize} bytes. ` +
+        `You can configure the database to allow more space by increasing the 'maxSize' option.`
+      );      
     }
 
     fs.writeFileSync(DB_FILE, JSON.stringify(this.documents));
