@@ -2,7 +2,7 @@ import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { IDatabase, IDocument } from './interfaces/database.interface';
 
-const DB_FILE = "data.json";
+const DB_FILE = 'data.json';
 
 class Database implements IDatabase {
   private documents: Record<string, IDocument>;
@@ -11,7 +11,7 @@ class Database implements IDatabase {
     this.documents = {};
 
     try {
-      const data = fs.readFileSync(DB_FILE, "utf8");
+      const data = fs.readFileSync(DB_FILE, 'utf8');
       this.documents = JSON.parse(data);
     } catch (err) {
       this._save();
@@ -26,7 +26,7 @@ class Database implements IDatabase {
     return this.documents[id];
   }
 
-  create(data: Omit<IDocument, "id">): IDocument {
+  create(data: Omit<IDocument, 'id'>): IDocument {
     const id = uuidv4();
     const document = { id, ...data };
     this.documents[id] = document;
@@ -53,7 +53,7 @@ class Database implements IDatabase {
 
   private _save(): void {
     const data = JSON.stringify(this.documents);
-    const size = Buffer.byteLength(data, "utf8");
+    const size = Buffer.byteLength(data, 'utf8');
 
     if (size > 5 * 1024 * 1024) {
       throw new Error(
