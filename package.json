@@ -54,5 +54,18 @@
   },
   "dependencies": {
     "uuid": "^9.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohitdhas/helix-db.git"
+  },
+  "keywords": [
+    "helix",
+    "database",
+    "nosql"
+  ],
+  "bugs": {
+    "url": "https://github.com/rohitdhas/helix-db/issues"
+  },
+  "homepage": "https://github.com/rohitdhas/helix-db#readme"
 }
