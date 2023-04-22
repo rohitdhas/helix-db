@@ -60,7 +60,7 @@ db.erase();
 Helix DB is designed to be a simple and lightweight database for small to medium-sized applications. As such, it has some limitations:
 
 - Helix DB is not suitable for very large datasets, as all documents are loaded into memory when the database is initialized.
-- The maximum size of the database is limited to 5 MB by default. This can be changed by providing a maxSize option in the Database constructor. If the database size exceeds the configured limit, an error will be thrown.
+- The maximum size of the database is limited to `5 MB` by default. This can be changed by providing a `maxSize` option in the Database constructor. If the database size exceeds the configured limit, an error will be thrown.
 
 ## 🚀 Contributing
 
