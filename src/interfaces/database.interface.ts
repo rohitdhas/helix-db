@@ -1,6 +1,6 @@
 interface IDocument {
   id: string;
-  [key: string]: string;
+  [key: string]: any;
 }
 
 interface IDatabase {
@@ -12,4 +12,8 @@ interface IDatabase {
   erase: (id: string) => void;
 }
 
-export { IDocument, IDatabase };
+interface IDbConfig {
+  maxSize?: number;
+}
+
+export { IDocument, IDatabase, IDbConfig };
