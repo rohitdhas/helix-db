@@ -8,7 +8,7 @@ Helix DB is a simple NoSQL database written in TypeScript for Node.js. It uses a
 - Supports basic CRUD operations (create, read, update, delete)
 - Stores data in a JSON file
 - Uses UUIDs as document IDs for uniqueness
-- Lightweight and minimalistic, with no external dependencies
+- Lightweight and minimalistic
 
 ## 📥 Installation
 
