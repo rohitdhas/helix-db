@@ -20,19 +20,22 @@ npm install helix-db
 
 ## Getting Started
 
-To use Helix DB in your Node.js project, you can import the `helix-db` module and start using its API:
+To use Helix DB in your Node.js project, you can import the `HelixDB` class from the `helix-db` module and create an instance of the class to start using its API.
 
 ```typescript
-import db from "helix-db";
+import { HelixDB } from "helix-db";
+
+// Create DB Instance
+const db = new HelixDB();
 
 // Create a new document
-const doc = db.create({ name: "John Doe", age: 42 });
+const doc = db.create({ name: "Rohit Dhas", age: 20 });
 
 // Read a document by ID
 const retrievedDoc = db.getById(doc.id);
 
 // Update a document
-db.update(doc.id, { age: 43 });
+db.update(doc.id, { age: 21 });
 
 // Delete a document
 db.delete(doc.id);
