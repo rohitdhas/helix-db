@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { IDatabase, IDocument, IDbConfig } from './interfaces/database.interface';
+import { isFileError } from './utils/error.util';
 
 const DB_FILE = path.join(__dirname, '..', '.helix', 'store.json');
 const DEFAULT_MAX_SIZE = 5; // Default size of 5 MB
@@ -20,8 +21,12 @@ class Database implements IDatabase {
       const data = fs.readFileSync(DB_FILE, 'utf8');
       this.documents = JSON.parse(data);
     } catch (err) {
-      // Creates .helix/store.json file if it doesn't exist
-      fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
+      if (isFileError(err)) {
+        // Creates .helix/store.json file if it doesn't exist
+        fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
+      } else {
+        throw err;
+      }
     }
   }
 
