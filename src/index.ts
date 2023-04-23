@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { IDatabase, IDocument, IDbConfig } from './interfaces/database.interface';
+import {
+  IDatabase,
+  IDocument,
+  IDbConfig,
+} from './interfaces/database.interface';
 import { isFileError } from './utils/error.util';
 
 const DB_FILE = path.join(process.cwd(), '.helix', 'store.json');
@@ -69,9 +73,11 @@ class Database implements IDatabase {
 
     if (size > this.maxSize) {
       throw new Error(
-        `Database file size limit (${(this.maxSize / 1024 / 1024).toFixed(2)} MB) exceeded. ` +
-        `You can configure the database to allow more space by increasing the 'maxSize' option.`
-      );      
+        `Database file size limit (${(this.maxSize / 1024 / 1024).toFixed(
+          2
+        )} MB) exceeded. ` +
+          `You can configure the database to allow more space by increasing the 'maxSize' option.`
+      );
     }
 
     fs.writeFileSync(DB_FILE, JSON.stringify(this.documents));

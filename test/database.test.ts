@@ -99,7 +99,6 @@ describe('Database', () => {
   });
 
   describe('maxSize config option', () => {
-
     it('should use default max size of 5 MB if not specified', () => {
       const db = new HelixDB();
       expect(db['maxSize']).toEqual(5 * 1024 * 1024);
