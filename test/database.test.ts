@@ -119,7 +119,7 @@ describe('Database', () => {
           db.create({ key: `key_${i}`, largeData }); // Add 3 documents that are each 4 MB in size
         }
       }).toThrowError(
-        "Database file size limit (8.00 MB) exceeded. Maximum allowed size is 8388608 bytes. You can configure the database to allow more space by increasing the 'maxSize' option."
+        "Database file size limit (8.00 MB) exceeded. You can configure the database to allow more space by increasing the 'maxSize' option."
       );
 
       db.erase();

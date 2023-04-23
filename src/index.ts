@@ -70,7 +70,6 @@ class Database implements IDatabase {
     if (size > this.maxSize) {
       throw new Error(
         `Database file size limit (${(this.maxSize / 1024 / 1024).toFixed(2)} MB) exceeded. ` +
-        `Maximum allowed size is ${this.maxSize} bytes. ` +
         `You can configure the database to allow more space by increasing the 'maxSize' option.`
       );      
     }
