@@ -33,8 +33,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Publish to NPM
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Check npm login
         run: |
-          echo $NPM_TOKEN
+          # Check if npm is already logged in
+          if [ -z "$(npm whoami 2> /dev/null)" ]; then
+            echo "Not logged in to npm, logging in now..."
+            # Log in to npm
+            echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
+            npm config set registry https://registry.npmjs.org/
+            npm login <<< "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}\n"
+          else
+            echo "Already logged in to npm as $(npm whoami)"
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
