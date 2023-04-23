@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { IDatabase, IDocument, IDbConfig } from './interfaces/database.interface';
 import { isFileError } from './utils/error.util';
 
-const DB_FILE = path.join(__dirname, '..', '.helix', 'store.json');
+const DB_FILE = path.join(process.cwd(), '.helix', 'store.json');
 const DEFAULT_MAX_SIZE = 5; // Default size of 5 MB
 
 class Database implements IDatabase {
